@@ -1,0 +1,11 @@
+Two types of Components in Next.js
+Server Components
+Next.js treats all components as server components by default
+It perform server-side tasks like reading files or fetching data directly from a database
+The trade-off is that they can't use React hooks or handle user interactions
+
+Client Components
+add 'use client' directive at the top of the component so you make it client component
+while client component can't perform server side task like reading files, they can use hooks and handle user interactions
+Traditional React components
+

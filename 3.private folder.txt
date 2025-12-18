@@ -1,0 +1,160 @@
+```
+Private Folders & Route Groups (Next.js App Router)
+
+Next.js provides two special folder patterns that help you organize your project without affecting the URL:
+
+Private Folders (_folder)
+Route Groups ((group))
+
+--------------------------------------------------
+
+1. Private Folders (_folder)
+
+What is a Private Folder?
+
+A private folder is a folder whose name starts with an underscore (_).
+
+Next.js ignores it for routing  
+You can still import files from it
+
+Example
+app/
+ ├── products/
+ │    ├── _components/
+ │    │    ├── ProductCard.tsx
+ │    │    └── ReviewList.tsx
+ │    ├── _utils/
+ │    │    └── formatPrice.ts
+ │    └── page.tsx
+
+URL Result
+/products            accessible
+/products/_components not accessible
+
+Why use Private Folders?
+
+Keep UI logic separate from routing  
+Organize helper components  
+Group related utilities  
+Avoid route name conflicts  
+Keep app/ clean and readable  
+
+How to use it
+
+import ProductCard from './_components/ProductCard'
+
+This works normally and is not part of routing.
+
+--------------------------------------------------
+
+2. Route Groups ((group))
+
+What is a Route Group?
+
+A route group is a folder wrapped in parentheses.
+
+Does not affect the URL  
+Used to organize routes logically  
+
+Example
+app/
+ ├── (auth)/
+ │    ├── login/
+ │    │    └── page.tsx
+ │    └── register/
+ │         └── page.tsx
+ ├── (dashboard)/
+ │    ├── settings/
+ │    │    └── page.tsx
+ │    └── profile/
+ │         └── page.tsx
+ └── page.tsx
+
+URL Result
+/login
+/register
+/settings
+/profile
+
+There is no /auth/login  
+There is no /dashboard/settings  
+
+Why use Route Groups?
+
+Organize large applications  
+Separate layouts per section  
+Cleaner mental model  
+No URL pollution  
+Easier team collaboration  
+
+--------------------------------------------------
+
+Layouts with Route Groups
+
+Structure
+app/
+ ├── (auth)/
+ │    ├── layout.tsx
+ │    ├── login/page.tsx
+ │    └── register/page.tsx
+ ├── (main)/
+ │    ├── layout.tsx
+ │    ├── page.tsx
+ │    └── products/page.tsx
+
+URLs
+/login
+/register
+/
+/products
+
+Different layouts are applied without changing the URL.
+
+--------------------------------------------------
+
+Visual Comparison
+
+Without Route Groups
+/auth/login
+/auth/register
+/dashboard/settings
+
+With Route Groups
+/login
+/register
+/settings
+
+--------------------------------------------------
+
+Private Folder vs Route Group
+
+Feature                _private     (group)
+Routing                No           Yes
+Affects URL            No           No
+Contains page.tsx      No           Yes
+Used for components    Yes          No
+Used for layouts       No           Yes
+
+--------------------------------------------------
+
+Rule of Thumb
+
+Use _folder for components, hooks, and utilities  
+Use (group) for organizing routes and layouts  
+Combine both for clean, scalable projects  
+
+--------------------------------------------------
+
+Real Project Example
+app/
+ ├── (auth)/
+ │    ├── _components/
+ │    │    └── LoginForm.tsx
+ │    ├── login/page.tsx
+ │    └── register/page.tsx
+ ├── (app)/
+ │    ├── _components/
+ │    │    └── Sidebar.tsx
+ │    ├── dashboard/page.tsx
+ │    └── settings/page.tsx
+```
