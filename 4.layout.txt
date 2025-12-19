@@ -1,0 +1,126 @@
+// layouts
+// Layout is automatically wrapped around pages in the same directory and also automatically created in the route tree
+
+//can create every page a unuque layout if needed
+// by creating a layout.tsx file in the same directory as the page
+
+// for example 
+// if i have page.tsx then at the same time i have  layout.tsx the layout will be used for that page then i have folder about then in about page there is another layout.tsx file then that layout will be used for the about page only
+
+//lets create layout that has header and footer for every page
+// layouts/Layout.tsx
+// import React from 'react';
+// import Header from '../components/Header';
+// import Footer from '../components/Footer';  
+// import { ReactNode } from 'react';
+
+// type Props = {
+//   children: ReactNode;
+// };
+
+// const Layout = ({ children }: Props) => {
+//   return (
+//     <div>
+//       {/* Header component appears on top of every page */}
+//       <Header />
+
+//       {/* Main content for the page */}
+//       <main>{children}</main>
+
+//       {/* Footer component appears at the bottom of every page */}
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default Layout;
+
+//header.tsx
+// components/Header.tsx
+// const Header = () => {
+//   return (
+//     <header>
+//       <h1>My Website</h1>
+//       {/* Add navigation links or any content you want here */}
+//     </header>
+//   );
+// };
+
+// export default Header;
+
+// Now, you can use this Layout component in your page files to ensure each page gets the header and footer.
+
+// Example page.tsx:
+
+// // pages/index.tsx
+// import Layout from '../layouts/Layout';
+
+// const HomePage = () => {
+//   return (
+//     <Layout>
+//       <h2>Welcome to My Website</h2>
+//       <p>This is the home page content.</p>
+//     </Layout>
+//   );
+// };
+
+// export default HomePage;
+
+//nested layouts
+// Nested Layouts (Optional):
+// If you want a different layout for a specific page or section (like the About page), you can create a layout.tsx file within that folder. The layout will only apply to pages within that folder.
+
+// Example about/layout.tsx:
+
+// // pages/about/layout.tsx
+// import React from 'react';
+// import { ReactNode } from 'react';
+
+// type Props = {
+//   children: ReactNode;
+// };
+
+// const AboutLayout = ({ children }: Props) => {
+//   return (
+//     <div>
+//       <header>About Section Header</header>
+//       <main>{children}</main>
+//       <footer>About Section Footer</footer>
+//     </div>
+//   );
+// };
+
+// export default AboutLayout;
+
+// Multiple layouts can be nested as needed, allowing for flexible and reusable page structures throughout your application.
+// as we know the route groups we can also use them with layouts to avoid creating extra folders in the url structure
+// for example if we want to create a layout for admin pages only we can use route groups like this 
+// // pages/(admin)/layout.tsx
+// import React from 'react';
+// import { ReactNode } from 'react';
+// type Props = {
+//   children: ReactNode;
+// };   
+// const AdminLayout = ({ children }: Props) => {
+//   return (
+//     <div>
+//       <header>Admin Section Header</header>
+//       <main>{children}</main>
+//       <footer>Admin Section Footer</footer>
+//     </div>
+//   );
+// };
+//
+// export default AdminLayout;
+
+// This layout will apply to all pages within the (admin) route group without adding (admin) to the URL structure.
+
+// wee need to group also the rest to (public) to avoid conflict the public pages will use the main layout and the admin pages will use the admin layout
+
+// another examplme is authentication for example login , register should no header and footer while all the page should have header and footer
+
+// all pages will go to (public) including the page.tsx and theier layout.tsx except login and register will go to (auth)
+// then we will create layout for (auth) without header and footer in it so the public and auth  groups will have their own layout
+
+
+

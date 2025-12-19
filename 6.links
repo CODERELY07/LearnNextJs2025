@@ -1,0 +1,199 @@
+Create a Dynamic Route
+
+In Next.js, dynamic routes are created by using square brackets ([]) in the file name. For example, let's create a dynamic route for a "Product" page.
+
+Create a Folder for the Dynamic Route
+
+Inside the pages directory, create a folder named product and inside that folder create a [productId].tsx file.
+
+mkdir pages/product
+touch pages/product/[productId].tsx
+
+Add Content to [productId].tsx
+// pages/product/[productId].tsx
+import { useRouter } from 'next/router';
+
+const ProductPage = () => {
+  const router = useRouter();
+  const { productId } = router.query;  // Get the dynamic parameter from the URL
+
+  return (
+    <div>
+      <h1>Product Page</h1>
+      <p>You're viewing product: {productId}</p>
+    </div>
+  );
+};
+
+export default ProductPage;
+
+
+Here:
+
+Dynamic Route: The [productId].tsx file makes the productId a dynamic parameter in the URL. This can be accessed using useRouter() from Next.js.
+
+productId: It's the dynamic part of the URL, and in this case, it can be any ID representing a product (e.g., /product/123 would set productId = 123).
+
+3. Create a Page with Dynamic Links
+
+Next, let's create a page (index.tsx) where we will link to different product pages using dynamic URLs.
+
+Add Dynamic Links to index.tsx
+// pages/index.tsx
+import Link from 'next/link';
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1>Welcome to the Product Store</h1>
+      <p>Select a product:</p>
+      
+      {/* Dynamic Links */}
+      <ul>
+        <li>
+          <Link href="/product/1">
+            <a>Product 1</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/product/2">
+            <a>Product 2</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/product/3">
+            <a>Product 3</a>
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default HomePage;
+
+
+Here, we created three dynamic links that lead to different products. When clicked, each link will take the user to a URL like /product/1, /product/2, or /product/3.
+
+4. Using the replace Attribute in Link
+
+The replace attribute in next/link is used to replace the current history entry in the browser history. This means that when the link is clicked, it replaces the current page in the history stack, instead of adding a new one.
+
+This can be useful for situations like:
+
+Navigating to a new page based on a parameter change but not wanting to leave a trace in the history stack.
+
+Updating the URL query without pushing a new history entry.
+
+Let's modify the previous dynamic links to use the replace attribute.
+
+Modify index.tsx with replace
+// pages/index.tsx
+import Link from 'next/link';
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1>Welcome to the Product Store</h1>
+      <p>Select a product:</p>
+      
+      {/* Dynamic Links with replace */}
+      <ul>
+        <li>
+          <Link href="/product/1" replace>
+            <a>Product 1</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/product/2" replace>
+            <a>Product 2</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/product/3" replace>
+            <a>Product 3</a>
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default HomePage;
+
+Explanation:
+
+The replace attribute makes sure that when you click on any of the product links, the page transition will replace the current entry in the browser history, instead of adding a new entry. This prevents the user from going back to the previous page by pressing the back button after selecting a product.
+
+5. Bonus: Using Dynamic Query Parameters with Link
+
+You can also pass query parameters dynamically with Link. For example, let's assume you want to pass a category query parameter when navigating to a product page.
+
+Example with Query Parameter:
+// pages/index.tsx
+import Link from 'next/link';
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1>Welcome to the Product Store</h1>
+      <p>Select a product:</p>
+      
+      {/* Dynamic Links with Query Parameter */}
+      <ul>
+        <li>
+          <Link href={{ pathname: '/product/1', query: { category: 'electronics' } }} replace>
+            <a>Product 1 (Electronics)</a>
+          </Link>
+        </li>
+        <li>
+          <Link href={{ pathname: '/product/2', query: { category: 'furniture' } }} replace>
+            <a>Product 2 (Furniture)</a>
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default HomePage;
+
+
+In this case:
+
+When you click on a link, the URL will include both the productId and the category query parameter, e.g., /product/1?category=electronics.
+
+The replace attribute will still replace the current history entry when the link is clicked.
+
+6. Accessing the Query Parameters in the Product Page
+
+You can access the category query parameter (along with the productId) in your product/[productId].tsx file by using the useRouter hook:
+
+// pages/product/[productId].tsx
+import { useRouter } from 'next/router';
+
+const ProductPage = () => {
+  const router = useRouter();
+  const { productId, category } = router.query;
+
+  return (
+    <div>
+      <h1>Product Page</h1>
+      <p>You're viewing product: {productId}</p>
+      <p>Category: {category}</p>
+    </div>
+  );
+};
+
+export default ProductPage;
+
+
+Here, both the productId and category query parameters can be accessed via router.query.
+
+Summary:
+
+Dynamic Links: Use Next.js's Link component to create links that navigate to dynamic routes based on parameters, like productId.
+
+replace Attribute: Use replace to prevent the current page from being added to the browser's history stack. This is useful when you want to update the URL without affecting the user's history (like updating a query parameter).
+
+Dynamic Query Parameters: You can also pass query parameters dynamically to a page. These can be accessed via useRouter in your page component.
