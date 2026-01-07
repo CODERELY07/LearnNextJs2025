@@ -1,0 +1,139 @@
+We can fetch Data using json
+for example
+app/data/users.json
+
+[
+    {"id" : 1, "name": "Coderely"},
+    {"id" : 2, "name": "CoderelyNext"},
+    {"id" : 3, "name": "Mark"}
+]
+
+app/page.tsx
+import users from "../data/users.json";
+
+export default function Home() {
+  return (
+    <div>
+      <h1 className="mt-5 font-bold text-xl">Users</h1>
+      <ul>
+        {
+          users.map((user) => (
+            <li key={user.id}>{user.name}</li>
+          ))
+        }
+      </ul>
+    </div>
+  );
+}
+
+
+Internal Api Route
+before the lesson 
+
+A common use of JSON is to exchange data to/from a web server.
+
+When sending data to a web server, the data has to be a string.
+
+You can convert any JavaScript datatype into a string with JSON.stringify().
+
+Use the JavaScript function JSON.stringify() to convert it into a string.
+
+
+let's create a simple crud using internal api route
+
+Read (Get)
+api/users/route.ts
+// temporary in-memory data
+let users = [
+    {id: 1, name: 'coderely'},
+    {id: 2, name: 'coderelyNextDev'},
+    {id: 3, name: 'markely'},
+];
+
+export async function GET(){
+    return new Response(JSON.stringify(users), {status: 200});
+}
+
+
+(root)/users/page.tsx
+'use client'
+import React, { useEffect, useState } from 'react'
+
+interface UserType {
+    id: number;
+    name: string
+}
+
+const User = () => {
+  const [users,setUsers] = useState<UserType[]>([]);
+
+  async function fetchUser(){
+    const res = await fetch('/api/users', {cache: 'no-store'});
+    const data = await res.json();
+    setUsers(data);
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  console.log(users);
+  return (
+    <div className='mt-5'>
+        <div>
+            <h1>Users</h1>
+            <ul>
+                {
+                    users.map((user) => (
+                        <li key={user.id}>{user.name}</li>
+                    ))
+                }
+            </ul>
+        </div>
+     
+    </div>
+  )
+}
+
+export default User
+
+Create
+add this in users/page.tsx
+  const [name, setName] = useState('');
+ async function addUser(){
+    if(!name) return;
+
+    await fetch('api/users', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({name}),
+    });
+
+    setName('');
+    fetchUser();
+  }
+
+ <h1>Users</h1>
+            <input type="text" placeholder='Enter you name' 
+             value={name}
+             onChange={(e) => setName(e.target.value)}
+            />
+            <button type='button' onClick={addUser}>Add</button>
+
+add this in api/users/route.ts
+export async function POST(request:any){
+    const {name} = await request.json();
+    if(!name){
+        return new Response(JSON.stringify({error: 'name is required'}), {status: 400});
+    }
+
+    let newUser = {id: users.length + 1, name};
+    users.push(newUser);
+    return new Response(JSON.stringify(newUser), {status:201})
+
+}
+
+Update
+add this in users/page.tsx
+
+
